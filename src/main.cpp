@@ -1,5 +1,5 @@
 /*
-	cubature_wrap a C++ wrapper for cubature C library
+    cubature_wrap a C++ wrapper for cubature C library
     Copyright (C) 2018 Oleg Skoromnik
 
     This program is free software: you can redistribute it and/or modify
