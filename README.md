@@ -145,6 +145,7 @@ License
 -------
 
 cubature_wrap a C++ wrapper for cubature C library
+
 Copyright (C) 2018 Oleg Skoromnik
 
 This program is free software: you can redistribute it and/or modify
@@ -162,6 +163,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 
 © 2018 cubature_wrap authors
 
-[apache]: https://www.apache.org/licenses/LICENSE-2.0
+[gpl]: https://www.gnu.org/licenses/gpl.html
 [cubature]: https://github.com/stevengj/cubature
 [issueTracker]: https://github.com/tupos/cubature_wrap/issues
