@@ -31,8 +31,8 @@ int main(int argc, char *argv[])
 	double eps_rel = 0.0001;
 
 	std::cout << "gauss 3d = "
-	   << cub::make_cubature_int<decltype(f)*,1,3>(
-			   f,10000,x_min,x_max,eps_abs,eps_rel)[0][0] << "\n";
+	   << cub::make_cubature_int(
+			   f,100000,x_min,x_max,eps_abs,eps_rel)[0][0] << "\n";
 	std::cout << "exact result = " << sqrt(M_PI) * M_PI << "\n";
 	
 	return 0;

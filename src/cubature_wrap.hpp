@@ -1,6 +1,10 @@
+#ifndef CUBATURE_WRAP_HPP
+#define CUBATURE_WRAP_HPP
+
 #include <cubature.h>
 #include <tuple>
 #include <array>
+#include <utility>
 #include <cstdlib>
 
 namespace cub{
@@ -13,6 +17,12 @@ namespace cub{
 		struct function_traits<R(*)(Args...)>
 		: public function_traits<R(Args...)> {};
 
+	// std::declval<F>()
+	template<class R, class... Args>
+		struct function_traits<R(*&&)(Args...)>
+		: public function_traits<R(Args...)> {};
+
+	// decltype()
 	template<class R, class... Args>
 		struct function_traits<R(Args...)>
 		{
@@ -31,19 +41,19 @@ namespace cub{
 				};
 		};
 
-	template <typename F, std::size_t F_SIZE, std::size_t X_SIZE>
+	template <typename F,
+			 std::size_t F_SIZE =
+				 std::tuple_size<typename function_traits<
+				 decltype(std::declval<F>())>::return_type>::value,
+			 std::size_t X_SIZE =
+				 std::tuple_size<typename function_traits<
+				 decltype(std::declval<F>())>::template argument<0>
+				 >::value
+				 >
 		class integrand_cxx{
 			public:
 				integrand_cxx(F func, std::size_t limit)
 					:func(func),
-					//f_size(std::tuple_size<
-							//typename
-							//function_traits<decltype(func)>::return_type
-							//>::value),
-					//x_size(std::tuple_size<
-							//typename
-							//function_traits<decltype(func)>::return_type
-							//>::value),
 					limit(limit) {}
 
 				std::array<std::array<double,2>,F_SIZE> integrate(
@@ -76,8 +86,6 @@ namespace cub{
 
 			private:
 				F func;
-				//const unsigned f_size;
-				//const unsigned x_size;
 				const std::size_t limit;
 
 				static int cubature_int_wrapper(
@@ -102,7 +110,15 @@ namespace cub{
 
 		};
 
-	template <typename F, std::size_t F_SIZE, std::size_t X_SIZE>
+	template <typename F,
+			 std::size_t F_SIZE =
+				 std::tuple_size<typename function_traits<
+				 decltype(std::declval<F>())>::return_type>::value,
+			 std::size_t X_SIZE =
+				 std::tuple_size<typename function_traits<
+				 decltype(std::declval<F>())>::template argument<0>
+				 >::value
+				 >
 		auto make_cubature_int(
 				F func,
 				std::size_t limit,
@@ -119,3 +135,5 @@ namespace cub{
 		}
 
 } /* end namespace cub */
+
+#endif /* CUBATURE_WRAP_HPP */
