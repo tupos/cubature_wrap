@@ -1,4 +1,4 @@
-## cub_wrap - A `C++` wrapper for [cubature][cubature] `C` library
+## cubature_wrap - A `C++` wrapper for [cubature][cubature] `C` library
 
 
 
@@ -9,6 +9,7 @@ Contents
 - [Installation](#installation)
 - [Contact](#contact)
 - [License](#license)
+
 
 Intro
 -----
@@ -26,8 +27,7 @@ eps_abs, eps_rel, norm)
 where `F` is any callable object, with the following signature
 
 ```c++
-std::array<double, F_SIZE>
-(*)(const std::array<double, X_SIZE> &)
+std::array<double, F_SIZE> (*)(const std::array<double, X_SIZE> &)
 ```
 
 Luckily, the modern `C++` standard allows one to have such a clean
@@ -58,6 +58,9 @@ the error respectively.
 Consequently, the actual usage is the following
 
 ```c++
+#include <iostream>
+#include <array>
+#include <cmath>
 
 #include <cubature_wrap.hpp>
 
@@ -85,7 +88,45 @@ int main(int argc, char *argv[])
 	
 	return 0;
 }
+```
 
+Installation
+------------
+If installed in the non standard location the following steps are
+necessary
+
+```
+git clone https://www.github.com/tupos/cubature_wrap
+cd cub_wrap
+git submodule init
+git submodule update
+mkdir build
+cd build
+cmake -DCMAKE_INSTALL_PREFIX=INSTALLATION_PATH ..
+make
+make install
+```
+
+where `INSTALLATION_PATH` is the installation path. If removed the
+default is used.
+
+Then in order to check that everyting is working as expected one can
+save the above test file lets say into `main.cpp` and compile and link
+
+on Mac OS for example
+
+```
+g++ -o cubature_test main.cpp -IINSTALLATION_PATH/include
+-LINSTALLATION_PATH/lib -std=c++14 -lcubature -rpath
+INSTALLATION_PATH/lib
+
+./cubature_test
+```
+
+On linux one should ommit `-rpath` and everything after it and run the
+program 
+```
+LD_LIBRARY_PATH=INSTALLATION_PATH/lib ./cubature_test
 ```
 
 
@@ -105,8 +146,8 @@ The author's homepage is <https://github.com/tupos>.
 License
 -------
 
-effz is free software, you can redistribute it and/or modify it under
-the terms of [Apache License 2.0][apache].
+cubature_wrap is free software, you can redistribute it and/or modify
+it under the terms of [Apache License 2.0][apache].
 
 Unless required by applicable law or agreed to in writing, Licensor
 provides the Work (and each Contributor provides its Contributions) on
@@ -119,16 +160,4 @@ A PARTICULAR PURPOSE.
 
 [apache]: https://www.apache.org/licenses/LICENSE-2.0
 [cubature]: https://github.com/stevengj/cubature
-[jphysb]: http://iopscience.iop.org/article/10.1088/1361-6455/aa92e6/meta
-[wikiHydrogen]: https://en.wikipedia.org/wiki/Hydrogen_atom
-[wikiBasisSet]: https://en.wikipedia.org/wiki/Orthonormal_basis
-[wikiThomasFermi]: https://en.wikipedia.org/wiki/Thomas%E2%80%93Fermi_model
-[issueTracker]: https://github.com/tupos/effz/issues
-[gsl]: https://www.gnu.org/software/gsl/
-[tbb]: https://www.threadingbuildingblocks.org/
-[scipy]: https://www.scipy.org/about.html
-[scipyInstall]: https://www.scipy.org/install.html
-[sympy]: http://www.sympy.org/de/index.html
-[matplotlib]: https://matplotlib.org/index.html
-[homebrew]: https://brew.sh/
-[effztar]: https://github.com/tupos/effz/releases
+[issueTracker]: https://github.com/tupos/cubature_wrap/issues
