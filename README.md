@@ -116,9 +116,7 @@ save the above test file lets say into `main.cpp` and compile and link
 on Mac OS for example
 
 ```
-g++ -o cubature_test main.cpp -IINSTALLATION_PATH/include
--LINSTALLATION_PATH/lib -std=c++14 -lcubature -rpath
-INSTALLATION_PATH/lib
+g++ -o cubature_test main.cpp -IINSTALLATION_PATH/include -LINSTALLATION_PATH/lib -std=c++14 -lcubature -rpath INSTALLATION_PATH/lib
 
 ./cubature_test
 ```
@@ -156,7 +154,7 @@ express or implied, including, without limitation, any warranties or
 conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR
 A PARTICULAR PURPOSE.
 
-© 2018 cub_wrapper authors
+© 2018 cubature_wrap authors
 
 [apache]: https://www.apache.org/licenses/LICENSE-2.0
 [cubature]: https://github.com/stevengj/cubature
