@@ -144,15 +144,21 @@ The author's homepage is <https://github.com/tupos>.
 License
 -------
 
-cubature_wrap is free software, you can redistribute it and/or modify
-it under the terms of [Apache License 2.0][apache].
+cubature_wrap a C++ wrapper for cubature C library
+Copyright (C) 2018 Oleg Skoromnik
 
-Unless required by applicable law or agreed to in writing, Licensor
-provides the Work (and each Contributor provides its Contributions) on
-an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
-express or implied, including, without limitation, any warranties or
-conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR
-A PARTICULAR PURPOSE.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the [GNU General Public License][gpl] as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>
 
 © 2018 cubature_wrap authors
 
