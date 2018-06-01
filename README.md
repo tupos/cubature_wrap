@@ -20,8 +20,7 @@ The main goal that I wanted to achieve is to obtain the syntax as
 close as possible to `mathematica`, i.e.,
 
 ```c++
-cub::make_cubature_int(F, limit, x_min, x_max,
-eps_abs, eps_rel, norm)
+cub::make_cubature_int(F, limit, x_min, x_max, eps_abs, eps_rel, norm)
 ```
 
 where `F` is any callable object, with the following signature
@@ -97,7 +96,7 @@ necessary
 
 ```
 git clone https://www.github.com/tupos/cubature_wrap
-cd cub_wrap
+cd cubature_wrap
 git submodule init
 git submodule update
 mkdir build

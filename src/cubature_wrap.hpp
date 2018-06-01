@@ -24,6 +24,7 @@
 #include <array>
 #include <utility>
 #include <cstdlib>
+#include <stdexcept>
 
 namespace cub{
 
