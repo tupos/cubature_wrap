@@ -75,7 +75,7 @@ namespace cub{
 					:func(func),
 					limit(limit) {}
 
-				std::array<std::array<double,2>,F_SIZE> integrate(
+				std::array<std::array<double,2>,F_SIZE> integrate_h(
 						const std::array<double,X_SIZE>& x_min,
 						const std::array<double,X_SIZE>& x_max,
 						double eps_abs,
@@ -83,24 +83,20 @@ namespace cub{
 						error_norm norm = ERROR_INDIVIDUAL
 						)
 				{
-					integrand i = &cubature_int_wrapper;
-					double *res = (double*)malloc(F_SIZE * sizeof(double));
-					double *err = (double*)malloc(F_SIZE * sizeof(double));
-					if(hcubature(F_SIZE, i, this, X_SIZE, x_min.data(),
-							x_max.data(), limit, eps_abs, eps_rel,
-							norm, res, err)){
-						throw(std::runtime_error(
-									"Error during integration"));
-					}
-					std::array<std::array<double,2>,F_SIZE> res_err;
-					for(std::size_t j = 0; j < F_SIZE; ++j){
-						res_err[j][0] = res[j];
-						res_err[j][1] = err[j];
-					}
-					free(res);
-					free(err);
+					return integrate(hcubature,x_min,x_max,
+							eps_abs,eps_rel,norm);
+				}
 
-					return res_err;
+				std::array<std::array<double,2>,F_SIZE> integrate_p(
+						const std::array<double,X_SIZE>& x_min,
+						const std::array<double,X_SIZE>& x_max,
+						double eps_abs,
+						double eps_rel,
+						error_norm norm = ERROR_INDIVIDUAL
+						)
+				{
+					return integrate(pcubature,x_min,x_max,
+							eps_abs,eps_rel,norm);
 				}
 
 			private:
@@ -127,6 +123,39 @@ namespace cub{
 					return 0;
 				}
 
+				typedef int (*cub_f_pointer)(unsigned, integrand, void*,
+						unsigned, const double*, const double*,
+						std::size_t, double, double, error_norm,
+						double*, double*);
+
+				std::array<std::array<double,2>,F_SIZE> integrate(
+						cub_f_pointer cub_routine,
+						const std::array<double,X_SIZE>& x_min,
+						const std::array<double,X_SIZE>& x_max,
+						double eps_abs,
+						double eps_rel,
+						error_norm norm)
+				{
+					integrand i = &cubature_int_wrapper;
+					double *res = (double*)malloc(F_SIZE * sizeof(double));
+					double *err = (double*)malloc(F_SIZE * sizeof(double));
+					if((*cub_routine)(F_SIZE, i, this, X_SIZE, x_min.data(),
+							x_max.data(), limit, eps_abs, eps_rel,
+							norm, res, err)){
+						throw(std::runtime_error(
+									"Error during integration"));
+					}
+					std::array<std::array<double,2>,F_SIZE> res_err;
+					for(std::size_t j = 0; j < F_SIZE; ++j){
+						res_err[j][0] = res[j];
+						res_err[j][1] = err[j];
+					}
+					free(res);
+					free(err);
+
+					return res_err;
+				}
+
 		};
 
 	template <typename F,
@@ -138,7 +167,7 @@ namespace cub{
 				 decltype(std::declval<F>())>::template argument<0>
 				 >::value
 				 >
-		auto make_cubature_int(
+		auto make_cubature_h_int(
 				F func,
 				std::size_t limit,
 				const std::array<double,X_SIZE>& x_min,
@@ -150,7 +179,31 @@ namespace cub{
 		{
 			integrand_cxx<F,F_SIZE,X_SIZE> i(func,limit);
 
-			return i.integrate(x_min, x_max, eps_abs, eps_rel, norm);
+			return i.integrate_h(x_min, x_max, eps_abs, eps_rel, norm);
+		}
+
+	template <typename F,
+			 std::size_t F_SIZE =
+				 std::tuple_size<typename function_traits<
+				 decltype(std::declval<F>())>::return_type>::value,
+			 std::size_t X_SIZE =
+				 std::tuple_size<typename function_traits<
+				 decltype(std::declval<F>())>::template argument<0>
+				 >::value
+				 >
+		auto make_cubature_p_int(
+				F func,
+				std::size_t limit,
+				const std::array<double,X_SIZE>& x_min,
+				const std::array<double,X_SIZE>& x_max,
+				double eps_abs,
+				double eps_rel,
+				error_norm norm = ERROR_INDIVIDUAL
+				)
+		{
+			integrand_cxx<F,F_SIZE,X_SIZE> i(func,limit);
+
+			return i.integrate_p(x_min, x_max, eps_abs, eps_rel, norm);
 		}
 
 } /* end namespace cub */

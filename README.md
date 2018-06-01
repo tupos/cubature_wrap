@@ -18,24 +18,20 @@ This is a `C++` wrapper for [cubature][cubature] `C` library.
 
 The main goal that I wanted to achieve is to obtain the syntax as
 close as possible to `mathematica`, i.e.,
-
 ```c++
-cub::make_cubature_int(F, limit, x_min, x_max, eps_abs, eps_rel, norm)
+cub::make_cubature_h_int(F, limit, x_min, x_max, eps_abs, eps_rel, norm)
 ```
-
 where `F` is any callable object, with the following signature
-
 ```c++
 std::array<double, F_SIZE> (*)(const std::array<double, X_SIZE> &)
 ```
 
 Luckily, the modern `C++` standard allows one to have such a clean
-syntax. Therefore, the wrapper implements a single function, which is
-located in the namespace `cub` and has the signature
-
+syntax. Therefore, the wrapper implements functions, which are
+located in the namespace `cub` and have the signature
 ```c++
 std::array<std::array<double,2>, F_SIZE>
-make_cubature_int(
+make_cubature_h_int(
 				F func,
 				std::size_t limit,
 				const std::array<double,X_SIZE>& x_min,
@@ -45,6 +41,9 @@ make_cubature_int(
 				error_norm norm = ERROR_INDIVIDUAL
 				)
 ```
+with the analogous definition for `make_cubature_p_int`. Here `p`
+and `h` in the definition of the function define the usage of
+`hcubature` and `pcubature` routines respectively.
 
 However, the length of the vector function `F_SIZE` and the dimension
 of the integration `X_SIZE` are determined by the compiler
@@ -73,16 +72,20 @@ std::array<double,1> f(const std::array<double,3> &x){
 
 int main(int argc, char *argv[])
 {
-
 	double lim = 5. * 1./sqrt(2.);
 	std::array<double,3> x_min = {-lim,-lim,-lim};
 	std::array<double,3> x_max = {lim,lim,lim};
 	double eps_abs = 0.0001;
 	double eps_rel = 0.0001;
 
-	std::cout << "gauss 3d = "
-	   << cub::make_cubature_int(
+	std::cout << "gauss 3d hcubature = "
+	   << cub::make_cubature_h_int(
 			   f,100000,x_min,x_max,eps_abs,eps_rel)[0][0] << "\n";
+
+	std::cout << "gauss 3d pcubature = "
+	   << cub::make_cubature_p_int(
+			   f,100000,x_min,x_max,eps_abs,eps_rel)[0][0] << "\n";
+
 	std::cout << "exact result = " << sqrt(M_PI) * M_PI << "\n";
 	
 	return 0;

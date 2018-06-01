@@ -38,9 +38,14 @@ int main(int argc, char *argv[])
 	double eps_abs = 0.0001;
 	double eps_rel = 0.0001;
 
-	std::cout << "gauss 3d = "
-	   << cub::make_cubature_int(
+	std::cout << "gauss 3d hcubature = "
+	   << cub::make_cubature_h_int(
 			   f,100000,x_min,x_max,eps_abs,eps_rel)[0][0] << "\n";
+
+	std::cout << "gauss 3d pcubature = "
+	   << cub::make_cubature_p_int(
+			   f,100000,x_min,x_max,eps_abs,eps_rel)[0][0] << "\n";
+
 	std::cout << "exact result = " << sqrt(M_PI) * M_PI << "\n";
 	
 	return 0;
